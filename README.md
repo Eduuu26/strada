@@ -1,107 +1,105 @@
 # Strada
 
-**Comunidad de rutas en coche y moto por España** — descubre rutas, quedadas, navegación en grupo y feed social.
+**Comunidad de rutas en coche y moto** — descubre rutas, quedadas, clubes, match de vehículos y feed social.
 
-## Inicio rápido (web)
+[![CI](https://github.com/stefansebastean/strada/actions/workflows/ci.yml/badge.svg)](https://github.com/stefansebastean/strada/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue)](CHANGELOG.md)
 
-Necesitas **dos terminales**:
+## Documentación
 
-```bash
+| Documento | Contenido |
+|-----------|-----------|
+| [DEV-LOCAL.md](./DEV-LOCAL.md) | Arranque en tu PC (API + app web) |
+| [LAUNCH.md](./LAUNCH.md) | Publicación App Store / Play Store |
+| [DEPLOY.md](./DEPLOY.md) | Despliegue en producción |
+| [SECURITY.md](./SECURITY.md) | Controles de seguridad |
+| [CHANGELOG.md](./CHANGELOG.md) | Historial de versiones |
+| [docs/VERSIONING.md](./docs/VERSIONING.md) | Cómo crear releases y tags |
+| [docs/INFRA-X99.md](./docs/INFRA-X99.md) | Servidor de trabajo remoto |
+
+## Inicio rápido (local)
+
+**Requisitos:** Node.js 20+, npm, Git.
+
+```powershell
 cd rutas-app
-npm run email-server:install
-cp server/.env.example server/.env
-# Edita server/.env y pon SMTP_PASS (contraseña de aplicación de Gmail)
-
-npm run email-server
-```
-
-```bash
-cd rutas-app
-python -m http.server 8787
-```
-
-Abre **http://127.0.0.1:8787/** (o `index.html`).
-
-### Web con Supabase (producción)
-
-Edita `assets/js/strada-config.js` con tu URL y anon key de Supabase (ver `strada-config.example.js`).
-
-### Email de peticiones de club
-
-Cuando alguien solicita un club, Strada envía un correo a **eslukacs2004@gmail.com**. Al aprobar o rechazar, el solicitante también recibe email.
-
-1. En Gmail: activa verificación en 2 pasos → [Contraseñas de aplicación](https://myaccount.google.com/apppasswords).
-2. Copia `server/.env.example` → `server/.env` y rellena `SMTP_PASS`.
-3. Arranca el servidor: `npm run email-server` (puerto **8788**).
-4. En web, `index.html` ya apunta a `http://127.0.0.1:8788`. En Expo, crea `.env` con:
-   ```
-   EXPO_PUBLIC_STRADA_EMAIL_API=https://tu-api.railway.app
-   ```
-   En emulador Android usa `http://10.0.2.2:8788` en lugar de `127.0.0.1`.
-
-Si el servidor de email no está activo, la solicitud se guarda igual en la app; solo falla el envío del correo (ver consola).
-
-## App móvil y web (Expo) — recomendado
-
-```bash
 npm install
-cp .env.example .env   # opcional: backend actual (Supabase) o futuro servidor propio
-npm run dev:web        # http://localhost:8082
-```
-
-En otra terminal (email de clubes):
-
-```bash
 npm run email-server:install
-cp server/.env.example server/.env
-npm run email-server
+copy .env.example .env
+copy server\.env.example server\.env
 ```
 
-### Pruebas rápidas
+**Terminal 1 — API** (puerto 8788):
 
-```bash
-npm run e2e:expo          # smoke de rutas web Expo (con dev:web activo)
-npm run test:group-location
+```powershell
+npm run dev:api
 ```
 
-> **Nota:** El backend actual usa Supabase, pero está prevista la migración a un servidor propio. La app usa `isBackendConfigured()` para abstraer el origen de datos.
+**Terminal 2 — App web** (puerto 8084):
 
-## Web estática legacy
+```powershell
+npm run dev:web
+```
 
-## Estructura
+Abre **http://localhost:8084**
+
+### Cuenta demo
+
+| Campo | Valor |
+|-------|-------|
+| Email | `carlos@strada.es` |
+| Contraseña | `StradaDemo1!` |
+
+### Pruebas
+
+```powershell
+npm run test:all
+```
+
+## Arquitectura
+
+```
+┌─────────────┐     JWT / REST      ┌──────────────────┐
+│  App Expo   │ ──────────────────► │  Strada API v1   │
+│  (cliente)  │   :8788             │  server/         │
+└─────────────┘                     └──────────────────┘
+```
+
+- **Backend activo:** `strada-api` (auth JWT propia, sin Supabase en local).
+- **App:** Expo 52 + React Native + expo-router.
+- **Almacenamiento local:** JSON en `server/data/` (desarrollo).
+
+## Estructura del proyecto
 
 ```
 rutas-app/
-├── index.html              # App web principal (Strada)
-├── assets/css/app.css      # Diseño profesional
-├── assets/js/app.js        # Lógica de la app
-├── assets/js/strada-config.js   # Supabase + email API (web)
-├── assets/js/supabase-web.js    # Auth y sync en navegador
-├── server/                 # API de email (nodemailer + Gmail)
-├── app/(tabs)/             # Explorar, Rutas, Quedadas, Conducir, Perfil
-├── src/components/         # UI reutilizable
-├── src/context/            # Estado (auth, rutas, feed)
-└── preview.html            # Redirige a index.html
+├── app/                 # Pantallas (expo-router)
+├── src/                 # Componentes, contextos, lógica
+├── server/              # API Node.js (auth, social, match)
+├── docs/                # Documentación técnica
+├── scripts/             # Tests y utilidades
+├── assets/              # Estáticos web legacy
+└── .github/workflows/   # CI y releases
 ```
 
-## Funcionalidades
+## Versiones
 
-| Área | Descripción |
-|------|-------------|
-| **Explorar** | Feed social con fotos, likes y comentarios |
-| **Rutas** | Rutas de la comunidad con foto y descripción |
-| **Quedadas** | Eventos con fecha y navegación a punto de encuentro |
-| **Conducir** | Mapa interactivo estilo navegación + Waze/Maps |
-| **Perfil** | Garaje de vehículos, avatar y progreso |
+| Versión | Fecha | Notas |
+|---------|-------|-------|
+| [1.0.0](CHANGELOG.md#100---2026-07-06) | 2026-07-06 | Primera release documentada, backend propio |
 
-Los datos de la web usan **Supabase** cuando `assets/js/strada-config.js` está configurado; si no, modo demo en `localStorage`.
+Ver [CHANGELOG.md](./CHANGELOG.md) para el historial completo.
 
-## Publicar en App Store y Google Play
+## Variables de entorno
 
-Guía completa en **[DEPLOY.md](./DEPLOY.md)**. Controles de seguridad en **[SECURITY.md](./SECURITY.md)**.
+Copia los `.env.example` — **nunca subas** `.env` ni `server/.env` a Git.
 
-## Próximos pasos
+| Variable | Descripción |
+|----------|-------------|
+| `EXPO_PUBLIC_BACKEND_PROVIDER` | `strada-api` (recomendado) |
+| `EXPO_PUBLIC_STRADA_API_URL` | URL del API (local: `http://127.0.0.1:8788`) |
+| `STRADA_JWT_SECRET` | Secreto JWT (solo servidor) |
 
-- Mapbox en móvil para navegación nativa
-- Notificaciones push para quedadas
-- Sincronizar rutas/feed/chats con Supabase (clubes y auth ya preparados)
+## Licencia
+
+Proyecto privado — `stefansebastean@gmail.com`
