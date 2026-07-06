@@ -1,0 +1,230 @@
+<div id="toast" class="toast"></div>
+
+        <!-- LOGIN -->
+        <div id="authLogin" class="screen-auth">
+          <div class="app-header"><h2>Iniciar sesión</h2></div>
+          <div class="content"><div class="content-inner">
+            <button class="auth-back" type="button" id="backFromLogin">← Volver</button>
+            <p class="kicker">Acceso opcional</p>
+            <h3 class="hero-title" style="font-size:1.3rem">Entra para apuntarte o crear rutas</h3>
+            <p class="hero-text">Puedes explorar sin cuenta. Solo necesitas sesión para apuntarte eligiendo tu vehículo.</p>
+            <div id="loginError" class="alert alert-error" hidden></div>
+            <form id="loginForm">
+              <div class="field"><label>Correo</label><input id="loginEmail" type="email" placeholder="tu@correo.com" required></div>
+              <div class="field"><label>Contraseña</label><input id="loginPassword" type="password" placeholder="Tu contraseña" required></div>
+              <button class="btn btn-primary" type="submit">Iniciar sesión</button>
+            </form>
+            <div class="auth-footer"><span style="color:var(--muted)">¿Sin cuenta?</span><button type="button" id="goRegister">Crear cuenta</button></div>
+          </div>
+        </div>
+
+        <!-- REGISTER -->
+        <div id="authRegister" class="screen-auth">
+          <div class="app-header"><h2>Crear cuenta</h2></div>
+          <div class="content">
+            <button class="auth-back" type="button" id="backFromRegister">← Volver</button>
+            <p class="kicker">Nueva cuenta</p>
+            <h3 class="hero-title" style="font-size:1.3rem">Únete a la comunidad</h3>
+            <p class="hero-text">Publica rutas y apúntate indicando con qué vehículo vas.</p>
+            <div id="registerError" class="alert alert-error" hidden></div>
+            <form id="registerForm">
+              <div class="field"><label>Nombre</label><input id="regName" type="text" placeholder="Tu nombre" required></div>
+              <div class="field"><label>Correo</label><input id="regEmail" type="email" placeholder="tu@correo.com" required></div>
+              <div class="field"><label>Contraseña</label><input id="regPassword" type="password" placeholder="Mín. 6 caracteres" required></div>
+              <div class="field"><label>Repetir</label><input id="regConfirm" type="password" placeholder="Repite" required></div>
+              <label class="check-row" id="termsRow">
+                <span class="checkbox" id="termsCheck"></span>
+                <span class="check-text">Acepto términos y privacidad</span>
+              </label>
+              <button class="btn btn-primary" type="submit">Crear cuenta</button>
+            </form>
+            <div class="auth-footer"><span style="color:var(--muted)">¿Ya tienes cuenta?</span><button type="button" id="goLogin">Iniciar sesión</button></div>
+          </div>
+        </div>
+
+        <!-- APP -->
+        <div id="mainShell">
+          <div class="app-header">
+            <h2 id="screenTitle">Explorar</h2>
+            <div class="user-badge" id="userBadge">
+              <div class="user-avatar" id="headerAvatar">?</div>
+              <span id="headerName">Invitado</span>
+            </div>
+          </div>
+
+          <div class="content">
+            <div class="panel active" data-panel="explore">
+              <div class="feed-toolbar" id="feedToolbar"></div>
+              <p class="hero-text" style="margin-top:-6px">Fotos de rutas y coches. Dale like, comenta o <strong>doble toque</strong> en la foto.</p>
+              <div id="feedList"></div>
+            </div>
+
+            <div class="panel" data-panel="routes">
+              <div id="exploreStats" class="quick-stats"></div>
+              <div id="nextEventBanner"></div>
+              <p class="kicker">España · Rutas en coche</p>
+              <h3 class="hero-title">Carreteras para disfrutar al volante</h3>
+              <p class="hero-text" style="margin-top:-4px">Rutas publicadas por conductores con foto y descripción de la experiencia.</p>
+              <input type="search" class="search-box" id="routeSearch" placeholder="Buscar ruta, región…" autocomplete="off">
+              <div class="filter-chips" id="routeFilters"></div>
+              <div id="createRouteToolbar"></div>
+              <p class="section-title">Rutas de la comunidad <span id="routeCount" style="color:var(--muted);font-weight:500"></span></p>
+              <div id="routeList"></div>
+            </div>
+
+            <div class="panel" data-panel="events">
+              <p class="hero-text">Quedadas con fecha. Al apuntarte eliges <strong>tipo y modelo de vehículo</strong>.</p>
+              <div id="eventsList"></div>
+            </div>
+
+            <div class="panel" data-panel="drive">
+              <div class="drive-map-wrap">
+                <div id="driveMap"></div>
+                <div class="waze-nav-banner">
+                  <div class="waze-turn" id="navTurnIcon">➡️</div>
+                  <div class="waze-nav-text">
+                    <strong id="navInstruction">Preparando ruta…</strong>
+                    <span id="navDistance">—</span>
+                  </div>
+                </div>
+                <div class="waze-bottom-bar">
+                  <span id="navEta">— min</span>
+                  <span id="navRemain">— km</span>
+                </div>
+              </div>
+              <div class="drive-controls">
+                <div id="driveRouteCard"></div>
+                <button class="btn btn-primary" type="button" id="driveNavBtn">Abrir en Waze / Maps</button>
+                <button class="btn btn-secondary" type="button" id="toggleShare">Compartir ubicación (grupo)</button>
+                <div class="group-panel" id="groupPanel" hidden>
+                  <h4>Grupo en ruta</h4>
+                  <div id="groupList"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" data-panel="profile">
+              <div id="profileGuest">
+                <div class="card" style="cursor:default">
+                  <div class="card-title" style="margin-bottom:6px">Cuenta opcional</div>
+                  <p class="card-desc">Explora libremente. Con cuenta puedes guardar tus vehículos, cambiar la foto de perfil y apuntarte a rutas.</p>
+                </div>
+                <button class="btn btn-primary" type="button" id="profileLoginBtn">Iniciar sesión</button>
+                <button class="btn btn-secondary" type="button" id="profileRegisterBtn">Crear cuenta</button>
+              </div>
+              <div id="profileUser" hidden></div>
+            </div>
+          </div></div>
+
+          <nav class="tab-bar">
+            <button class="tab active" data-tab="explore" type="button"><span class="tab-icon">📸</span>Explorar</button>
+            <button class="tab" data-tab="routes" type="button"><span class="tab-icon">🗺️</span>Rutas</button>
+            <button class="tab" data-tab="events" type="button"><span class="tab-icon">📅</span>Quedadas</button>
+            <button class="tab" data-tab="drive" type="button"><span class="tab-icon">🚗</span>Conducir</button>
+            <button class="tab" data-tab="profile" type="button"><span class="tab-icon">👤</span>Perfil</button>
+          </nav>
+        </div>
+
+        <div id="detailShell" class="screen-detail">
+          <div class="app-header">
+            <button class="detail-back" type="button" id="backBtn">← Volver</button>
+            <h2>Detalle</h2>
+          </div>
+          <div class="content" id="detailContent"></div>
+        </div>
+
+        <div id="createRouteModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3>Publicar ruta</h3>
+            <p>Otros usuarios podrán apuntarse con su vehículo.</p>
+            <form id="createRouteForm">
+              <label class="post-file-label" id="routeFileLabel">
+                <input type="file" id="crCover" accept="image/*">
+                📷 Foto de previsualización *
+              </label>
+              <img id="crCoverPreview" class="post-image-preview" alt="">
+              <div class="field"><label>Título *</label><input class="field-input" id="crTitle" required></div>
+              <div class="field"><label>Comunidad autónoma *</label><input class="field-input" id="crRegion" required></div>
+              <div class="field"><label>Descripción de la ruta *</label><textarea class="field-input" id="crDesc" placeholder="Cuéntanos qué haréis, tipo de carretera, paradas destacadas…" required></textarea></div>
+              <div class="field"><label>Distancia (km) *</label><input class="field-input" id="crKm" type="number" min="1" required></div>
+              <div class="field"><label>Duración (min) *</label><input class="field-input" id="crMin" type="number" min="1" required></div>
+              <div class="field"><label>Paradas (una por línea) *</label><textarea class="field-input" id="crStops" placeholder="Salida&#10;Mirador&#10;Destino" required></textarea></div>
+              <div class="field"><label>Fecha y hora quedada *</label><input class="field-input" id="crDate" type="datetime-local" required></div>
+              <div class="field"><label>Punto de encuentro *</label><input class="field-input" id="crMeet" required></div>
+              <div class="field"><label>Plazas máximas</label><input class="field-input" id="crMax" type="number" value="20" min="2"></div>
+              <div id="createRouteError" class="alert alert-error" hidden></div>
+              <button class="btn btn-primary" type="submit">Publicar ruta</button>
+              <button class="btn btn-secondary" type="button" id="closeCreateRoute">Cancelar</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="joinModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3>Apuntarse a la ruta</h3>
+            <p id="joinRouteTitle"></p>
+            <p class="section-title" style="font-size:0.85rem">¿Con qué vehículo vas?</p>
+            <div id="joinNoVehicles" class="empty-garage" hidden>
+              Aún no tienes vehículos guardados. Añade al menos uno en tu perfil.
+              <button type="button" class="btn btn-secondary btn-sm" id="joinGoProfile" style="margin-top:10px">Ir a mi perfil</button>
+            </div>
+            <div class="saved-vehicles" id="savedVehiclesList"></div>
+            <div id="joinError" class="alert alert-error" hidden></div>
+            <button class="btn btn-primary" type="button" id="confirmJoin">Confirmar apunte</button>
+            <button class="btn btn-secondary" type="button" id="joinManageVehicles">Gestionar vehículos</button>
+            <button class="btn btn-secondary" type="button" id="closeJoin">Cancelar</button>
+          </div>
+        </div>
+
+        <div id="vehicleFormModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3 id="vehicleFormTitle">Añadir vehículo</h3>
+            <p>Lo usarás al apuntarte a rutas. Puedes guardar varios.</p>
+            <div class="vehicle-grid" id="vehicleFormGrid"></div>
+            <div class="field">
+              <label>Modelo o descripción *</label>
+              <input class="field-input" id="vehicleFormLabel" placeholder="Ej. Golf GTI, Porsche 911…">
+            </div>
+            <div id="vehicleFormError" class="alert alert-error" hidden></div>
+            <button class="btn btn-primary" type="button" id="saveVehicleBtn">Guardar vehículo</button>
+            <button class="btn btn-secondary" type="button" id="closeVehicleForm">Cancelar</button>
+          </div>
+        </div>
+
+        <input type="file" id="avatarFileInput" accept="image/*" hidden>
+
+        <div id="avatarPickerModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3>Foto de perfil</h3>
+            <p>Elige un avatar o sube tu propia foto.</p>
+            <div class="avatar-presets" id="avatarPresets"></div>
+            <button class="btn btn-primary btn-sm" type="button" id="avatarUploadBtn">📷 Subir desde galería</button>
+            <button class="btn btn-secondary btn-sm" type="button" id="avatarRemoveBtn">Quitar foto</button>
+            <button class="btn btn-secondary" type="button" id="closeAvatarPicker">Cerrar</button>
+          </div>
+        </div>
+
+        <div id="createPostModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3>Nueva publicación</h3>
+            <p>Comparte una foto de tu ruta o tu coche con la comunidad.</p>
+            <form id="createPostForm">
+              <label class="post-file-label" id="postFileLabel">
+                <input type="file" id="postImageFile" accept="image/*">
+                📷 Toca para elegir foto
+              </label>
+              <img id="postImagePreview" class="post-image-preview" alt="">
+              <div class="field"><label>Descripción *</label><textarea class="field-input" id="postCaption" placeholder="Cuéntanos la ruta, el coche, la experiencia…" required></textarea></div>
+              <div class="field"><label>Ruta (opcional)</label><input class="field-input" id="postRoute" placeholder="Ej. Sierra de Madrid"></div>
+              <div class="field"><label>Vehículo (opcional)</label><input class="field-input" id="postVehicle" placeholder="Ej. BMW M2"></div>
+              <div id="createPostError" class="alert alert-error" hidden></div>
+              <button class="btn btn-primary" type="submit">Publicar</button>
+              <button class="btn btn-secondary" type="button" id="closeCreatePost">Cancelar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  

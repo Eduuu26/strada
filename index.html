@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080b10">
+  <meta name="description" content="Strada — Comunidad de rutas en coche y moto por España. Descubre rutas, quedadas y navegación en grupo.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Strada — Coches y motos</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23e85d2c' rx='22' width='100' height='100'/><text x='50' y='68' font-size='52' font-weight='800' fill='white' text-anchor='middle' font-family='system-ui'>S</text></svg>">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: https: blob:; connect-src 'self' http://127.0.0.1:8788 https://*.supabase.co wss://*.supabase.co https://images.unsplash.com; font-src 'self'; frame-ancestors 'none'; base-uri 'self';">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+  <div id="splash" class="splash" aria-hidden="true">
+    <div class="splash-logo">Strada</div>
+    <div class="splash-tagline">Coches y motos · España</div>
+    <div class="splash-loader" role="progressbar"></div>
+  </div>
+
+  <div id="appRoot" class="app-root hidden">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text"><strong>Strada</strong><span>Coches y motos · España</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav">
+        <button type="button" class="active" data-tab="explore"><span class="nav-icon">📸</span>Explorar</button>
+        <button type="button" data-tab="routes"><span class="nav-icon">🗺️</span>Rutas</button>
+        <button type="button" data-tab="events"><span class="nav-icon">📅</span>Quedadas</button>
+        <button type="button" data-tab="clubs"><span class="nav-icon">🏁</span>Clubes</button>
+        <button type="button" data-tab="chats"><span class="nav-icon">💬</span>Chats</button>
+        <button type="button" data-tab="drive"><span class="nav-icon">🚗</span>Conducir</button>
+        <button type="button" data-tab="profile"><span class="nav-icon">👤</span>Perfil</button>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="docs/privacy-policy.html" target="_blank" rel="noopener">Privacidad</a> ·
+        <a href="docs/terms-of-service.html" target="_blank" rel="noopener">Términos</a> ·
+        <a href="docs/aviso-legal.html" target="_blank" rel="noopener">Aviso legal</a> ·
+        <a href="docs/cookie-policy.html" target="_blank" rel="noopener">Cookies</a><br>
+        © 2026 LUKACORP SL · Strada
+      </div>
+    </aside>
+
+    <div class="app-main">
+<div id="toast" class="toast"></div>
+
+        <!-- LOGIN -->
+        <div id="authLogin" class="screen-auth">
+          <div class="auth-screen-wrap"><div class="auth-card">
+            <div class="brand" style="margin-bottom:20px"><div class="brand-mark">S</div><div class="brand-text"><strong>Strada</strong><span>Coches y motos · España</span></div></div>
+            <button class="auth-back" type="button" id="backFromLogin">← Volver</button>
+            <p class="kicker">Tu cuenta</p>
+            <h3 class="hero-title" style="font-size:1.35rem">Bienvenido de nuevo</h3>
+            <p class="hero-text">Accede para publicar rutas, guardar tu garaje y apuntarte a quedadas.</p>
+            <div id="loginError" class="alert alert-error" hidden></div>
+            <form id="loginForm">
+              <div class="field"><label>Correo</label><input id="loginEmail" type="email" placeholder="tu@correo.com" required></div>
+              <div class="field"><label>Contraseña</label><input id="loginPassword" type="password" placeholder="Tu contraseña" required></div>
+              <button class="btn btn-primary" type="submit">Iniciar sesión</button>
+            </form>
+            <div class="auth-footer"><span style="color:var(--muted)">¿Sin cuenta?</span><button type="button" id="goRegister">Crear cuenta</button></div>
+          </div></div>
+        </div>
+
+        <!-- REGISTER -->
+        <div id="authRegister" class="screen-auth">
+          <div class="auth-screen-wrap"><div class="auth-card">
+            <div class="brand" style="margin-bottom:20px"><div class="brand-mark">S</div><div class="brand-text"><strong>Strada</strong><span>Únete a la comunidad</span></div></div>
+            <button class="auth-back" type="button" id="backFromRegister">← Volver</button>
+            <p class="kicker">Registro</p>
+            <h3 class="hero-title" style="font-size:1.35rem">Crea tu cuenta</h3>
+            <p class="hero-text">Publica rutas con foto, organiza quedadas y conecta con otros conductores.</p>
+            <div id="registerError" class="alert alert-error" hidden></div>
+            <form id="registerForm">
+              <div class="field"><label>Nombre</label><input id="regName" type="text" placeholder="Tu nombre" required></div>
+              <div class="field"><label>Correo</label><input id="regEmail" type="email" placeholder="tu@correo.com" required></div>
+              <div class="field"><label>Contraseña</label><input id="regPassword" type="password" placeholder="Mín. 10 caracteres, mayúscula, número" required></div>
+              <div class="field"><label>Repetir</label><input id="regConfirm" type="password" placeholder="Repite" required></div>
+              <label class="check-row" id="termsRow">
+                <span class="checkbox" id="termsCheck"></span>
+                <span class="check-text">Acepto términos y privacidad</span>
+              </label>
+              <button class="btn btn-primary" type="submit">Crear cuenta</button>
+            </form>
+            <div class="auth-footer"><span style="color:var(--muted)">¿Ya tienes cuenta?</span><button type="button" id="goLogin">Iniciar sesión</button></div>
+          </div></div>
+        </div>
+
+        <!-- APP -->
+        <div id="mainShell">
+          <div class="app-header">
+            <div class="mobile-brand"><div class="brand-mark">S</div><div class="brand-text"><strong>Strada</strong></div></div>
+            <h2 id="screenTitle">Explorar</h2>
+            <div class="user-badge" id="userBadge">
+              <div class="user-avatar" id="headerAvatar">?</div>
+              <span id="headerName">Invitado</span>
+            </div>
+          </div>
+
+          <div class="content">
+            <div class="content-inner">
+            <div class="panel active" data-panel="explore">
+              <p class="kicker">Comunidad</p>
+              <h3 class="hero-title">Explorar</h3>
+              <p class="hero-text" style="margin-top:-6px">Fotos de rutas, coches y motos. Dale like, comenta o <strong>doble toque</strong> en la foto.</p>
+              <div class="feed-toolbar" id="feedToolbar"></div>
+              <div id="feedList"></div>
+            </div>
+
+            <div class="panel" data-panel="routes">
+              <div id="exploreStats" class="quick-stats"></div>
+              <div id="nextEventBanner"></div>
+              <p class="kicker">España · Coches y motos</p>
+              <h3 class="hero-title">Carreteras para disfrutar al volante</h3>
+              <p class="hero-text" style="margin-top:-4px">Rutas publicadas por conductores con foto y descripción de la experiencia.</p>
+              <input type="search" class="search-box" id="routeSearch" placeholder="Buscar ruta, región…" autocomplete="off">
+              <div class="filter-chips" id="routeFilters"></div>
+              <div id="createRouteToolbar"></div>
+              <p class="section-title">Rutas de la comunidad <span id="routeCount" style="color:var(--muted);font-weight:500"></span></p>
+              <div id="routeList"></div>
+            </div>
+
+            <div class="panel" data-panel="events">
+              <p class="kicker">Comunidad · Coches y motos</p>
+              <h3 class="hero-title">Organiza quedadas con otros conductores</h3>
+              <p class="hero-text">Crea una quedada con fecha, punto de encuentro y plazas. Puedes vincularla a una ruta publicada o hacerla independiente.</p>
+              <div id="createMeetupToolbar"></div>
+              <p class="section-title">Próximas quedadas</p>
+              <div id="eventsList"></div>
+            </div>
+
+            <div class="panel" data-panel="clubs">
+              <p class="kicker">Comunidad</p>
+              <h3 class="hero-title">Clubes</h3>
+              <p class="hero-text" style="margin-top:-6px">Explora clubes por perímetro. Por defecto verás clubes en toda España.</p>
+              <div id="createClubToolbar"></div>
+              <div id="clubsList"></div>
+            </div>
+
+            <div class="panel" data-panel="chats">
+              <p class="kicker">Grupo</p>
+              <h3 class="hero-title">Chats</h3>
+              <p class="hero-text" style="margin-top:-6px">Al apuntarte a una ruta o quedada entras al chat con el resto de participantes.</p>
+              <div id="chatsList"></div>
+            </div>
+
+            <div class="panel" data-panel="drive">
+              <div class="drive-map-wrap">
+                <div id="driveMap"></div>
+                <div class="waze-nav-banner">
+                  <div class="waze-turn" id="navTurnIcon">➡️</div>
+                  <div class="waze-nav-text">
+                    <strong id="navInstruction">Preparando ruta…</strong>
+                    <span id="navDistance">—</span>
+                  </div>
+                </div>
+                <div class="waze-bottom-bar">
+                  <span id="navEta">— min</span>
+                  <span id="navRemain">— km</span>
+                </div>
+              </div>
+              <div class="drive-controls">
+                <div id="driveRouteCard"></div>
+                <button class="btn btn-primary" type="button" id="driveNavBtn">Abrir en Waze / Maps</button>
+                <button class="btn btn-secondary" type="button" id="toggleShare">Compartir ubicación (grupo)</button>
+                <div class="group-panel" id="groupPanel" hidden>
+                  <h4>Grupo en ruta</h4>
+                  <div id="groupList"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" data-panel="profile">
+              <div id="profileGuest">
+                <div class="card" style="cursor:default">
+                  <div class="card-title" style="margin-bottom:6px">Tu perfil en Strada</div>
+                  <p class="card-desc">Gestiona tu garaje, foto de perfil y rutas a las que te has apuntado.</p>
+                </div>
+                <button class="btn btn-primary" type="button" id="profileLoginBtn">Iniciar sesión</button>
+                <button class="btn btn-secondary" type="button" id="profileRegisterBtn">Crear cuenta</button>
+              </div>
+              <div id="profileUser" hidden></div>
+            </div>
+          </div></div>
+
+          <nav class="tab-bar">
+            <button class="tab active" data-tab="explore" type="button"><span class="tab-icon">📸</span>Explorar</button>
+            <button class="tab" data-tab="routes" type="button"><span class="tab-icon">🗺️</span>Rutas</button>
+            <button class="tab" data-tab="events" type="button"><span class="tab-icon">📅</span>Quedadas</button>
+            <button class="tab" data-tab="clubs" type="button"><span class="tab-icon">🏁</span>Clubes</button>
+            <button class="tab" data-tab="chats" type="button"><span class="tab-icon">💬</span>Chats</button>
+            <button class="tab" data-tab="drive" type="button"><span class="tab-icon">🚗</span>Conducir</button>
+            <button class="tab" data-tab="profile" type="button"><span class="tab-icon">👤</span>Perfil</button>
+          </nav>
+        </div>
+
+        <div id="detailShell" class="screen-detail">
+          <div class="app-header">
+            <button class="detail-back" type="button" id="backBtn">← Volver</button>
+            <h2>Detalle</h2>
+          </div>
+          <div class="content" id="detailContent"></div>
+        </div>
+
+        <div id="chatShell" class="detail-shell">
+          <div class="detail-header">
+            <button class="detail-back" type="button" id="chatBackBtn">← Volver</button>
+            <h2 id="chatThreadTitle">Chat</h2>
+          </div>
+          <div class="chat-thread">
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-composer" id="chatComposer">
+              <textarea class="field-input chat-input" id="chatInput" rows="2" placeholder="Escribe un mensaje…"></textarea>
+              <button class="btn btn-primary btn-sm" type="button" id="chatSendBtn">Enviar</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="clubShell" class="screen-detail">
+          <div class="detail-header">
+            <button class="detail-back" type="button" id="clubBackBtn">← Volver</button>
+            <h2 id="clubDetailTitle">Club</h2>
+          </div>
+          <div class="content" id="clubDetailContent"></div>
+        </div>
+
+        <div id="createClubModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3>Solicitar club</h3>
+            <p>Envía tu petición al equipo de Strada. La revisaremos en administración y te notificaremos cuando el club esté creado.</p>
+            <form id="createClubForm">
+              <div class="field"><label>Nombre del club *</label><input class="field-input" id="ccName" required placeholder="Ej. Madrid Sport Drivers"></div>
+              <div class="field"><label>Descripción *</label><textarea class="field-input" id="ccDesc" required placeholder="Qué tipo de salidas hacéis, zona, ritmo…"></textarea></div>
+              <div class="field"><label>Tipo de vehículos</label>
+                <div class="filter-chips" id="ccVehicleMode">
+                  <button type="button" class="filter-chip active" data-mode="mixto">🚗🏍️ Coches y motos</button>
+                  <button type="button" class="filter-chip" data-mode="coches">🚗 Solo coches</button>
+                  <button type="button" class="filter-chip" data-mode="motos">🏍️ Solo motos</button>
+                </div>
+              </div>
+              <div id="createClubError" class="alert alert-error" hidden></div>
+              <button class="btn btn-primary" type="submit">Enviar solicitud</button>
+              <button class="btn btn-secondary" type="button" id="closeCreateClub">Cancelar</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="createRouteModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3>Publicar ruta</h3>
+            <p>Otros usuarios podrán apuntarse con su vehículo.</p>
+            <form id="createRouteForm">
+              <label class="post-file-label" id="routeFileLabel">
+                <input type="file" id="crCover" accept="image/*">
+                📷 Foto de previsualización *
+              </label>
+              <img id="crCoverPreview" class="post-image-preview" alt="">
+              <div class="field"><label>Título *</label><input class="field-input" id="crTitle" required></div>
+              <div class="field"><label>Comunidad autónoma *</label><input class="field-input" id="crRegion" required></div>
+              <div class="field"><label>Tipo de ruta *</label>
+                <div class="filter-chips" id="crVehicleMode">
+                  <button type="button" class="filter-chip active" data-mode="mixto">🚗🏍️ Coches y motos</button>
+                  <button type="button" class="filter-chip" data-mode="coches">🚗 Solo coches</button>
+                  <button type="button" class="filter-chip" data-mode="motos">🏍️ Solo motos</button>
+                </div>
+              </div>
+              <div class="field"><label>Descripción de la ruta *</label><textarea class="field-input" id="crDesc" placeholder="Cuéntanos qué haréis, tipo de carretera, paradas destacadas…" required></textarea></div>
+              <div class="field"><label>Distancia (km) *</label><input class="field-input" id="crKm" type="number" min="1" required></div>
+              <div class="field"><label>Duración (min) *</label><input class="field-input" id="crMin" type="number" min="1" required></div>
+              <div class="field"><label>Paradas (una por línea) *</label><textarea class="field-input" id="crStops" placeholder="Salida&#10;Mirador&#10;Destino" required></textarea></div>
+              <div class="field"><label>Acceso a la ruta</label>
+                <div class="filter-chips" id="crJoinMode">
+                  <button type="button" class="filter-chip active" data-join="open">🌐 Abierta — cualquiera se apunta</button>
+                  <button type="button" class="filter-chip" data-join="request">🔒 Privada — solicitud</button>
+                </div>
+              </div>
+              <p class="hero-text" style="font-size:0.85rem;margin:-4px 0 8px">Para organizar una quedada con fecha, usa la pestaña <strong>Quedadas</strong>.</p>
+              <div id="createRouteError" class="alert alert-error" hidden></div>
+              <button class="btn btn-primary" type="submit">Publicar ruta</button>
+              <button class="btn btn-secondary" type="button" id="closeCreateRoute">Cancelar</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="createMeetupModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3>Organizar quedada</h3>
+            <p>La verán otros usuarios en la pestaña Quedadas.</p>
+            <form id="createMeetupForm">
+              <label class="post-file-label" id="meetupFileLabel">
+                <input type="file" id="cmCover" accept="image/*">
+                📷 Foto de portada (opcional)
+              </label>
+              <img id="cmCoverPreview" class="post-image-preview" alt="">
+              <div class="field"><label>Título *</label><input class="field-input" id="cmTitle" required placeholder="Ej. Salida dominical por la sierra"></div>
+              <div class="field"><label>Descripción *</label><textarea class="field-input" id="cmDesc" placeholder="Qué haréis, ritmo, paradas…" required></textarea></div>
+              <div class="field"><label>Ruta vinculada (opcional)</label><select class="field-input" id="cmRoute"><option value="">Sin ruta — solo quedada</option></select></div>
+              <div class="field"><label>Tipo de vehículos *</label>
+                <div class="filter-chips" id="cmVehicleMode">
+                  <button type="button" class="filter-chip active" data-mode="mixto">🚗🏍️ Coches y motos</button>
+                  <button type="button" class="filter-chip" data-mode="coches">🚗 Solo coches</button>
+                  <button type="button" class="filter-chip" data-mode="motos">🏍️ Solo motos</button>
+                </div>
+              </div>
+              <div class="field"><label>Fecha y hora *</label><input class="field-input" id="cmDate" type="datetime-local" required></div>
+              <div class="field"><label>Punto de encuentro *</label><input class="field-input" id="cmMeet" required placeholder="Dirección o referencia clara"></div>
+              <div class="field"><label>Plazas máximas</label><input class="field-input" id="cmMax" type="number" value="20" min="2"></div>
+              <div class="field"><label>Acceso a la quedada</label>
+                <div class="filter-chips" id="cmJoinMode">
+                  <button type="button" class="filter-chip active" data-join="open">🌐 Abierta — inscripción directa</button>
+                  <button type="button" class="filter-chip" data-join="request">🔒 Privada — solicitud</button>
+                </div>
+              </div>
+              <div id="createMeetupError" class="alert alert-error" hidden></div>
+              <button class="btn btn-primary" type="submit">Publicar quedada</button>
+              <button class="btn btn-secondary" type="button" id="closeCreateMeetup">Cancelar</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="joinModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3 id="joinModalHeading">Apuntarse</h3>
+            <p id="joinRouteTitle"></p>
+            <p class="section-title" style="font-size:0.85rem">¿Con qué vehículo vas?</p>
+            <div id="joinNoVehicles" class="empty-garage" hidden>
+              Aún no tienes vehículos guardados. Añade al menos uno en tu perfil.
+              <button type="button" class="btn btn-secondary btn-sm" id="joinGoProfile" style="margin-top:10px">Ir a mi perfil</button>
+            </div>
+            <div class="saved-vehicles" id="savedVehiclesList"></div>
+            <div id="joinError" class="alert alert-error" hidden></div>
+            <button class="btn btn-primary" type="button" id="confirmJoin">Confirmar apunte</button>
+            <button class="btn btn-secondary" type="button" id="joinManageVehicles">Gestionar vehículos</button>
+            <button class="btn btn-secondary" type="button" id="closeJoin">Cancelar</button>
+          </div>
+        </div>
+
+        <div id="vehicleFormModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3 id="vehicleFormTitle">Añadir vehículo</h3>
+            <p>Elige coche o moto e indica marca, modelo y año. Lo usarás al apuntarte a quedadas.</p>
+            <div class="field"><label>Tipo de vehículo *</label><div class="vehicle-grid vehicle-grid--dual" id="vehicleFormGrid"></div></div>
+            <div class="field"><label>Marca *</label><input class="field-input" id="vehicleFormBrand" placeholder="Ej. Seat, Yamaha, BMW…" autocomplete="organization"></div>
+            <div class="field"><label>Modelo *</label><input class="field-input" id="vehicleFormModel" placeholder="Ej. León, MT-07, Serie 3…"></div>
+            <div class="field"><label>Año *</label><input class="field-input" id="vehicleFormYear" type="number" min="1950" max="2030" placeholder="Ej. 2020" inputmode="numeric"></div>
+            <div class="field"><label>Foto del vehículo *</label><p class="field-hint">Obligatoria. Sube al menos una foto de tu coche o moto.</p><img id="vehiclePhotoPreview" class="vehicle-photo-preview" alt="" hidden><div class="vehicle-photo-presets" id="vehiclePhotoPresets"></div></div>
+            <div id="vehicleFormError" class="alert alert-error" hidden></div>
+            <div class="vehicle-form-actions">
+              <button class="btn btn-secondary profile-action-btn" type="button" id="saveVehicleBtn">Guardar vehículo</button>
+              <button class="btn btn-secondary" type="button" id="closeVehicleForm">Cancelar</button>
+            </div>
+          </div>
+        </div>
+
+        <input type="file" id="avatarFileInput" accept="image/*" hidden>
+        <input type="file" id="vehiclePhotoFileInput" accept="image/*" hidden>
+
+        <div id="avatarPickerModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3>Foto de perfil</h3>
+            <p>Elige un avatar o sube tu propia foto.</p>
+            <div class="avatar-presets" id="avatarPresets"></div>
+            <button class="btn btn-primary btn-sm" type="button" id="avatarUploadBtn">📷 Subir desde galería</button>
+            <button class="btn btn-secondary btn-sm" type="button" id="avatarRemoveBtn">Quitar foto</button>
+            <button class="btn btn-secondary" type="button" id="closeAvatarPicker">Cerrar</button>
+          </div>
+        </div>
+
+        <div id="createPostModal" class="modal-overlay">
+          <div class="modal-sheet">
+            <h3>Nueva publicación</h3>
+            <p>Comparte una foto de tu ruta o tu vehículo con la comunidad.</p>
+            <form id="createPostForm">
+              <label class="post-file-label" id="postFileLabel">
+                <input type="file" id="postImageFile" accept="image/*" required>
+                📷 Toca para elegir foto *
+              </label>
+              <div class="field"><label>Descripción *</label><textarea class="field-input" id="postCaption" placeholder="Cuéntanos la ruta, tu coche o moto, la experiencia…" required></textarea></div>
+              <div class="field"><label>Ruta (opcional)</label><input class="field-input" id="postRoute" placeholder="Ej. Sierra de Madrid"></div>
+              <div class="field"><label>Vehículo (opcional)</label><input class="field-input" id="postVehicle" placeholder="Ej. BMW M2"></div>
+              <div class="field">
+                <label>Previsualización</label>
+                <p class="field-hint">Así se verá tu publicación en el feed.</p>
+                <article id="postFeedPreview" class="feed-post post-feed-preview"></article>
+              </div>
+              <div id="createPostError" class="alert alert-error" hidden></div>
+              <button class="btn btn-primary" type="submit">Publicar</button>
+              <button class="btn btn-secondary" type="button" id="closeCreatePost">Cancelar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="assets/js/strada-config.js"></script>
+  <script src="assets/js/supabase-web.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
