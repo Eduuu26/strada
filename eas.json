@@ -1,57 +1,57 @@
 ﻿{
-    "cli":  {
-                "version":  "\u003e= 16.0.0",
-                "appVersionSource":  "remote"
-            },
-    "build":  {
-                  "development":  {
-                                      "developmentClient":  true,
-                                      "distribution":  "internal",
-                                      "ios":  {
-                                                  "simulator":  true
-                                              },
-                                      "env":  {
-                                                  "APP_ENV":  "development"
-                                              }
-                                  },
-                  "preview":  {
-                                  "distribution":  "internal",
-                                  "ios":  {
-                                              "simulator":  false
-                                          },
-                                  "android":  {
-                                                  "buildType":  "apk"
-                                              },
-                                  "env":  {
-                                              "APP_ENV":  "preview"
-                                          }
-                              },
-                  "production":  {
-                                     "autoIncrement":  true,
-                                     "env":  {
-                                                 "APP_ENV":  "production",
-                                                 "EXPO_PUBLIC_BACKEND_PROVIDER":  "strada-api",
-                                                 "EXPO_PUBLIC_STRADA_API_URL":  "https://sponsored-rpg-greetings-consumers.trycloudflare.com",
-                                                 "EXPO_PUBLIC_STRADA_EMAIL_API":  "https://sponsored-rpg-greetings-consumers.trycloudflare.com",
-                                                 "EXPO_PUBLIC_PRIVACY_POLICY_URL":  "https://eduuu26.github.io/strada/privacy-policy.html",
-                                                 "EXPO_PUBLIC_TERMS_URL":  "https://eduuu26.github.io/strada/terms-of-service.html",
-                                                 "EXPO_PUBLIC_LEGAL_NOTICE_URL":  "https://eduuu26.github.io/strada/aviso-legal.html",
-                                                 "EXPO_PUBLIC_COOKIE_POLICY_URL":  "https://eduuu26.github.io/strada/cookie-policy.html",
-                                                 "EXPO_PUBLIC_SUBSCRIPTION_TERMS_URL":  "https://eduuu26.github.io/strada/subscription-terms.html"
-                                             }
-                                 }
-              },
-    "submit":  {
-                   "production":  {
-                                      "ios":  {
-                                                  "appleId":  "eslukacs2004@gmail.com",
-                                                  "ascAppId":  "REEMPLAZA_CON_APP_STORE_CONNECT_ID",
-                                                  "appleTeamId":  "REEMPLAZA_CON_TEAM_ID"
-                                              },
-                                      "android":  {
-                                                      "serviceAccountKeyPath":  "./store-listing/google-play-service-account.json",
-                                                      "track":  "production"
-                                                  }
-                                  }
-               }
+  "cli": {
+    "version": ">= 16.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "APP_ENV": "development"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "ios": {
+        "simulator": false
+      },
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "APP_ENV": "preview"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "env": {
+        "APP_ENV": "production",
+        "EXPO_PUBLIC_BACKEND_PROVIDER": "strada-api",
+        "EXPO_PUBLIC_STRADA_API_URL": "https://sponsored-rpg-greetings-consumers.trycloudflare.com",
+        "EXPO_PUBLIC_STRADA_EMAIL_API": "https://sponsored-rpg-greetings-consumers.trycloudflare.com",
+        "EXPO_PUBLIC_PRIVACY_POLICY_URL": "https://eduuu26.github.io/strada/privacy-policy.html",
+        "EXPO_PUBLIC_TERMS_URL": "https://eduuu26.github.io/strada/terms-of-service.html",
+        "EXPO_PUBLIC_LEGAL_NOTICE_URL": "https://eduuu26.github.io/strada/aviso-legal.html",
+        "EXPO_PUBLIC_COOKIE_POLICY_URL": "https://eduuu26.github.io/strada/cookie-policy.html",
+        "EXPO_PUBLIC_SUBSCRIPTION_TERMS_URL": "https://eduuu26.github.io/strada/subscription-terms.html"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "eslukacs2004@gmail.com",
+        "ascAppId": "REEMPLAZA_CON_APP_STORE_CONNECT_ID",
+        "appleTeamId": "REEMPLAZA_CON_TEAM_ID"
+      },
+      "android": {
+        "serviceAccountKeyPath": "./store-listing/google-play-service-account.json",
+        "track": "production"
+      }
+    }
+  }
 }

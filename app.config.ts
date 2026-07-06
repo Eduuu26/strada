@@ -111,7 +111,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       projectId:
         process.env.EAS_PROJECT_ID ??
         process.env.EXPO_PUBLIC_EAS_PROJECT_ID ??
-        undefined,
+        '17334f92-12cc-40e5-b668-9b06f2d0d0b3',
     },
     stradaEmailApi:
       process.env.EXPO_PUBLIC_STRADA_EMAIL_API ??
@@ -122,5 +122,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       (isProduction ? undefined : 'http://127.0.0.1:8788'),
     backendProvider: process.env.EXPO_PUBLIC_BACKEND_PROVIDER ?? 'local',
   },
-  owner: 'strada-app',
+  owner: 'eduuu.26',
 });

@@ -19,8 +19,8 @@ store-listing/google-play-service-account.json
 # Config local con credenciales (usar *.example.js)
 assets/js/strada-config.js
 
-# Supabase legacy — no subir a GitHub (migración a Strada API)
-supabase/
+# Supabase legacy (solo carpeta raíz) — migración a Strada API
+/supabase/
 SETUP-SUPABASE.md
 scripts/setup-supabase.mjs
 scripts/smoke-supabase.mjs
