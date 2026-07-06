@@ -14,7 +14,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 $repo = "strada"
-$user = (gh api user -q .login)
+$user = "Eduuu26"
 $remote = "https://github.com/$user/$repo.git"
 
 Write-Host "=== Repositorio: $user/$repo ===" -ForegroundColor Cyan

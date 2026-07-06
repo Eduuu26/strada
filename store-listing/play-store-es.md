@@ -27,7 +27,7 @@ Maps & Navigation (o Social)
 **Soporte:** administracion@strada.com
 
 ## Política de privacidad
-https://strada-app.github.io/docs/privacy-policy.html
+https://eduuu26.github.io/strada/privacy-policy.html
 
 ## Clasificación de contenido
 Completar cuestionario en Play Console (ubicación, UGC, comunicación entre usuarios).

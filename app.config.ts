@@ -84,19 +84,29 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     appEnv: APP_ENV,
     privacyPolicyUrl:
       process.env.EXPO_PUBLIC_PRIVACY_POLICY_URL ??
-      'https://strada-app.github.io/docs/privacy-policy.html',
+      (isProduction
+        ? 'https://eduuu26.github.io/strada/privacy-policy.html'
+        : 'https://strada-app.github.io/docs/privacy-policy.html'),
     termsUrl:
       process.env.EXPO_PUBLIC_TERMS_URL ??
-      'https://strada-app.github.io/docs/terms-of-service.html',
+      (isProduction
+        ? 'https://eduuu26.github.io/strada/terms-of-service.html'
+        : 'https://strada-app.github.io/docs/terms-of-service.html'),
     legalNoticeUrl:
       process.env.EXPO_PUBLIC_LEGAL_NOTICE_URL ??
-      'https://strada-app.github.io/docs/aviso-legal.html',
+      (isProduction
+        ? 'https://eduuu26.github.io/strada/aviso-legal.html'
+        : 'https://strada-app.github.io/docs/aviso-legal.html'),
     cookiePolicyUrl:
       process.env.EXPO_PUBLIC_COOKIE_POLICY_URL ??
-      'https://strada-app.github.io/docs/cookie-policy.html',
+      (isProduction
+        ? 'https://eduuu26.github.io/strada/cookie-policy.html'
+        : 'https://strada-app.github.io/docs/cookie-policy.html'),
     subscriptionTermsUrl:
       process.env.EXPO_PUBLIC_SUBSCRIPTION_TERMS_URL ??
-      'https://strada-app.github.io/docs/subscription-terms.html',
+      (isProduction
+        ? 'https://eduuu26.github.io/strada/subscription-terms.html'
+        : 'https://strada-app.github.io/docs/subscription-terms.html'),
     eas: {
       projectId:
         process.env.EAS_PROJECT_ID ??

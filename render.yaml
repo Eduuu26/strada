@@ -1,0 +1,40 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Conectar repo GitHub → New → Blueprint → seleccionar este archivo
+
+services:
+  - type: web
+    name: strada-api
+    runtime: docker
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: ./server
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8788
+      - key: STRADA_JWT_SECRET
+        generateValue: true
+      - key: STRADA_EMAIL_API_KEY
+        generateValue: true
+      - key: STRADA_JWT_TTL_SEC
+        value: "604800"
+      - key: ADMIN_EMAIL
+        value: administracion@strada.com
+      - key: SUPABASE_URL
+        value: ""
+      - key: SUPABASE_ANON_KEY
+        value: ""
+      - key: CORS_ORIGINS
+        value: https://eduuu26.github.io,https://strada.es,http://localhost:8084
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_SECURE
+        value: "false"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false

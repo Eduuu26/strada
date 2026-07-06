@@ -42,7 +42,7 @@ LUKACORP SL · CIF B24794836 · Madrid
 https://github.com/strada-app
 
 ## Política de privacidad
-https://strada-app.github.io/docs/privacy-policy.html
+https://eduuu26.github.io/strada/privacy-policy.html
 
 ## Clasificación de edad
 12+ (contenido generado por usuarios, ubicación)
