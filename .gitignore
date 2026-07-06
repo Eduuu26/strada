@@ -23,6 +23,10 @@ supabase/
 SETUP-SUPABASE.md
 scripts/setup-supabase.mjs
 scripts/smoke-supabase.mjs
+
+# Logs locales
+expo-web*.log
+install-*.log
 *.jks
 *.keystore
 
