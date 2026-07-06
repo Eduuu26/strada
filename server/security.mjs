@@ -9,8 +9,11 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 export function securityConfigOk() {
   if (!IS_PRODUCTION) return { ok: true };
   const missing = [];
-  if (!SUPABASE_URL) missing.push('SUPABASE_URL');
-  if (!SUPABASE_ANON_KEY) missing.push('SUPABASE_ANON_KEY');
+  const hasSupabase = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+  const hasStradaAuth = Boolean(process.env.STRADA_JWT_SECRET?.trim());
+  if (!hasSupabase && !hasStradaAuth) {
+    missing.push('STRADA_JWT_SECRET (o SUPABASE_URL + SUPABASE_ANON_KEY)');
+  }
   return { ok: missing.length === 0, missing };
 }
 
@@ -26,7 +29,9 @@ export async function verifyBearerToken(authHeader) {
   }
 
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    if (IS_PRODUCTION) return { ok: false, error: 'Servidor no configurado' };
+    if (IS_PRODUCTION) {
+      return { ok: false, error: strada.error || 'Sesión inválida o expirada' };
+    }
     return { ok: true, user: { email: ADMIN_EMAIL, id: 'dev' }, devBypass: true };
   }
 
