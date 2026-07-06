@@ -29,4 +29,4 @@ Versionado según [Semantic Versioning](https://semver.org/lang/es/).
 - Servidor `x99` (Tailscale `100.66.89.32`) limpiado y preparado para trabajo remoto.
 - AnyDesk ID: `773354590`.
 
-[1.0.0]: https://github.com/stefansebastean/strada/releases/tag/v1.0.0
+[1.0.0]: https://github.com/Eduuu26/strada/releases/tag/v1.0.0

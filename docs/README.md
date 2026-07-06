@@ -20,8 +20,8 @@
 
 | Recurso | URL |
 |---------|-----|
-| Repositorio | `https://github.com/stefansebastean/strada` |
-| Releases | `https://github.com/stefansebastean/strada/releases` |
+| Repositorio | `https://github.com/Eduuu26/strada` |
+| Releases | `https://github.com/Eduuu26/strada/releases` |
 | CI | `.github/workflows/ci.yml` |
 
 Tras el primer push, actualiza las URLs si el nombre del repo es distinto.

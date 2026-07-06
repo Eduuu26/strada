@@ -2,7 +2,7 @@
 
 **Comunidad de rutas en coche y moto** — descubre rutas, quedadas, clubes, match de vehículos y feed social.
 
-[![CI](https://github.com/stefansebastean/strada/actions/workflows/ci.yml/badge.svg)](https://github.com/stefansebastean/strada/actions/workflows/ci.yml)
+[![CI](https://github.com/Eduuu26/strada/actions/workflows/ci.yml/badge.svg)](https://github.com/Eduuu26/strada/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue)](CHANGELOG.md)
 
 ## Documentación
