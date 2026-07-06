@@ -10,6 +10,7 @@ web-build/
 *.orig.*
 .env
 .env.local
+deploy/x99/.ovh.env
 server/.env
 server/node_modules/
 server/data/
