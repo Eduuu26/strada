@@ -47,8 +47,8 @@ Conexión remota con escritorio gráfico. Contraseña de acceso desatendido conf
 | Datos persistentes | `/mnt/M5/strada-api/data` |
 | Contenedores | `strada-api`, `strada-caddy` |
 | Puerto interno API | `8788` |
-| HTTPS público | `https://api.strada.es` (tras DNS + puertos 80/443) |
-| IP pública | `85.56.205.160` |
+| HTTPS público | Cloudflare Tunnel (sin dominio propio) |
+| URL API actual | Ver `deploy/x99/api-url.txt` |
 
 ### Desplegar / actualizar
 

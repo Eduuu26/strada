@@ -1,13 +1,26 @@
 # Conectar API de x99 a la app (eas.json, .env.production, secretos EAS)
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$ApiUrl
+    [string]$ApiUrl = ""
 )
 
 $ErrorActionPreference = "Stop"
-$ApiUrl = $ApiUrl.TrimEnd('/')
 $root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 Set-Location $root
+
+if (-not $ApiUrl) {
+    $urlFile = Join-Path $root "deploy\x99\api-url.txt"
+    if (Test-Path $urlFile) {
+        $ApiUrl = (Get-Content $urlFile -Raw).Trim()
+        Write-Host "URL desde deploy/x99/api-url.txt" -ForegroundColor Gray
+    }
+}
+
+if (-not $ApiUrl) {
+    Write-Host "Uso: .\scripts\connect-x99-api.ps1 -ApiUrl 'https://tu-url.trycloudflare.com'" -ForegroundColor Yellow
+    exit 1
+}
+
+$ApiUrl = $ApiUrl.TrimEnd('/')
 
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 

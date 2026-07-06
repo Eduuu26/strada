@@ -1,67 +1,68 @@
-# Publicar Strada — estado y pasos restantes
+# Publicar Strada en App Store y Google Play (sin dominio propio)
 
-## Hecho automáticamente
+## Ya configurado
 
-- [x] Código en GitHub: https://github.com/Eduuu26/strada
-- [x] Release v1.0.0
-- [x] GitHub Pages workflow (docs legales HTTPS)
-- [x] API en servidor x99 (`deploy/x99/`, scripts `deploy-x99.ps1`)
-- [x] Dockerfile del servidor corregido
-- [x] URLs legales en `app.config.ts` y `eas.json`
-- [x] `.env.production.example`
+| Pieza | Estado |
+|-------|--------|
+| Código GitHub | https://github.com/Eduuu26/strada |
+| Docs legales HTTPS | https://eduuu26.github.io/strada/ |
+| API producción (x99) | `https://sponsored-rpg-greetings-consumers.trycloudflare.com` |
+| `eas.json` production | URLs API + legales |
+| Cuenta demo revisores | `carlos@strada.es` / `StradaDemo1!` |
 
-## URLs legales (tras activar Pages)
+## URLs legales (App Store / Play Store)
 
 | Documento | URL |
 |-----------|-----|
-| Índice | https://eduuu26.github.io/strada/ |
 | Privacidad | https://eduuu26.github.io/strada/privacy-policy.html |
 | Términos | https://eduuu26.github.io/strada/terms-of-service.html |
 
-**Activar Pages:** GitHub → repo `strada` → Settings → Pages → Source: **GitHub Actions**
+No hace falta dominio propio — GitHub Pages vale para las tiendas.
 
-# API en producción (servidor x99 — siempre encendido)
+## API (tu servidor x99)
 
-La API corre en **tu servidor x99** con Docker + Caddy. Datos en `/mnt/M5/strada-api/data`.
+HTTPS público vía **Cloudflare Tunnel** (gratis, sin dominio).
 
 ```powershell
 cd C:\Users\Eduardo\Desktop\www\rutas-app
 .\scripts\deploy-x99.ps1
-.\scripts\connect-x99-api.ps1 -ApiUrl "https://api.strada.es"
+.\scripts\connect-x99-api.ps1   # lee deploy/x99/api-url.txt
 ```
 
-**DNS:** crea un registro `A` → `api.strada.es` → `85.56.205.160` (IP pública del servidor).
+> Si reinicias el túnel Cloudflare, la URL puede cambiar. Actualiza `deploy/x99/api-url.txt` y vuelve a ejecutar `connect-x99-api.ps1` antes de un build nuevo.
 
-**Router:** abre puertos **80** y **443** hacia x99.
+## Publicar — 4 pasos tuyos
 
-> Render no se usa. Puedes borrar el blueprint en dashboard.render.com si quieres.
-
-## EAS Build
+### 1. Login Expo (una vez)
 
 ```powershell
-npm install -g eas-cli
-cd C:\Users\Eduardo\Desktop\www\rutas-app
 eas login
+```
+
+### 2. Vincular proyecto EAS
+
+```powershell
 eas init
-.\scripts\setup-eas-production.ps1
+```
+
+### 3. Build producción
+
+```powershell
 eas build --platform android --profile production
 eas build --platform ios --profile production
 ```
 
-## Submit a tiendas
+### 4. Subir a tiendas
 
 ```powershell
 eas submit --platform android --latest
 eas submit --platform ios --latest
 ```
 
-Completa en `eas.json`: `appleTeamId` y `ascAppId` desde App Store Connect.
+Completa en `eas.json`: `appleTeamId` y `ascAppId` (App Store Connect).
 
-## Cuenta demo (revisores)
-
-- Email: `carlos@strada.es`
-- Contraseña: `StradaDemo1!`
+Android: coloca `store-listing/google-play-service-account.json` (clave de Play Console).
 
 ## Capturas
 
-Carpeta: `store-listing/screenshots/` — mínimo 2 Android, 3 iPhone.
+`store-listing/screenshots/` — mínimo 2 Android, 3 iPhone.

@@ -27,6 +27,9 @@ $remoteSetup = @(
     'docker compose build --pull'
     'docker compose up -d'
     'docker compose ps'
+    'sleep 10'
+    'docker logs strada-cf-tunnel 2>&1 | grep -o "https://[a-z0-9-]*\\.trycloudflare\\.com" | head -1 > /mnt/M5/strada-api/api-url.txt || true'
+    'cat /mnt/M5/strada-api/api-url.txt 2>/dev/null || echo "(sin URL tunnel aun)"'
 ) -join '; '
 
 ssh $SshHost $remoteSetup

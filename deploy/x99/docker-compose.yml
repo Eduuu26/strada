@@ -1,4 +1,4 @@
-# Strada API en servidor x99 — datos persistentes en /mnt/M5
+# Strada API en x99 — sin dominio propio (HTTPS vía Cloudflare Tunnel)
 services:
   strada-api:
     build:
@@ -27,16 +27,18 @@ services:
     container_name: strada-caddy
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "127.0.0.1:80:80"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
     depends_on:
       strada-api:
         condition: service_healthy
 
-volumes:
-  caddy_data:
-  caddy_config:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: strada-cf-tunnel
+    restart: unless-stopped
+    network_mode: host
+    command: tunnel --no-autoupdate --url http://127.0.0.1:80
+    depends_on:
+      - caddy
