@@ -31,6 +31,8 @@
       "env": {
         "APP_ENV": "production",
         "EXPO_PUBLIC_BACKEND_PROVIDER": "strada-api",
+        "EXPO_PUBLIC_STRADA_API_URL": "https://api.strada.es",
+        "EXPO_PUBLIC_STRADA_EMAIL_API": "https://api.strada.es",
         "EXPO_PUBLIC_PRIVACY_POLICY_URL": "https://eduuu26.github.io/strada/privacy-policy.html",
         "EXPO_PUBLIC_TERMS_URL": "https://eduuu26.github.io/strada/terms-of-service.html",
         "EXPO_PUBLIC_LEGAL_NOTICE_URL": "https://eduuu26.github.io/strada/aviso-legal.html",

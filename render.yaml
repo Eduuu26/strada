@@ -1,3 +1,4 @@
+# DEPRECATED — Strada usa servidor propio x99. Ver deploy/x99/ y scripts/deploy-x99.ps1
 # Render Blueprint — https://render.com/docs/blueprint-spec
 # Conectar repo GitHub → New → Blueprint → seleccionar este archivo
 

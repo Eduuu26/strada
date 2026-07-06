@@ -5,7 +5,7 @@
 - [x] Código en GitHub: https://github.com/Eduuu26/strada
 - [x] Release v1.0.0
 - [x] GitHub Pages workflow (docs legales HTTPS)
-- [x] `render.yaml` para API en producción
+- [x] API en servidor x99 (`deploy/x99/`, scripts `deploy-x99.ps1`)
 - [x] Dockerfile del servidor corregido
 - [x] URLs legales en `app.config.ts` y `eas.json`
 - [x] `.env.production.example`
@@ -20,13 +20,21 @@
 
 **Activar Pages:** GitHub → repo `strada` → Settings → Pages → Source: **GitHub Actions**
 
-## API en producción (Render — 5 min)
+# API en producción (servidor x99 — siempre encendido)
 
-1. https://dashboard.render.com → **New** → **Blueprint**
-2. Conecta el repo `Eduuu26/strada`
-3. Añade variables secretas: `SMTP_USER`, `SMTP_PASS` (Gmail app password)
-4. Deploy → copia la URL (ej. `https://strada-api.onrender.com`)
-5. Ejecuta `.\scripts\setup-eas-production.ps1` con esa URL
+La API corre en **tu servidor x99** con Docker + Caddy. Datos en `/mnt/M5/strada-api/data`.
+
+```powershell
+cd C:\Users\Eduardo\Desktop\www\rutas-app
+.\scripts\deploy-x99.ps1
+.\scripts\connect-x99-api.ps1 -ApiUrl "https://api.strada.es"
+```
+
+**DNS:** crea un registro `A` → `api.strada.es` → `85.56.205.160` (IP pública del servidor).
+
+**Router:** abre puertos **80** y **443** hacia x99.
+
+> Render no se usa. Puedes borrar el blueprint en dashboard.render.com si quieres.
 
 ## EAS Build
 

@@ -1,0 +1,14 @@
+[Unit]
+Description=Tailscale Funnel — Strada API (puerto 8788)
+After=network-online.target tailscaled.service docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/tailscale funnel --bg 8788
+ExecStop=/usr/bin/tailscale funnel reset
+
+[Install]
+WantedBy=multi-user.target

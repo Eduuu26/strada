@@ -1,0 +1,42 @@
+# Strada API en servidor x99 — datos persistentes en /mnt/M5
+services:
+  strada-api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: strada-api
+    restart: unless-stopped
+    expose:
+      - "8788"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: "8788"
+    volumes:
+      - /mnt/M5/strada-api/data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8788/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: strada-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      strada-api:
+        condition: service_healthy
+
+volumes:
+  caddy_data:
+  caddy_config:

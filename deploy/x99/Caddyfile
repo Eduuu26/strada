@@ -1,0 +1,9 @@
+# API Strada — HTTPS con Let's Encrypt (requiere DNS api.strada.es → IP pública del servidor)
+api.strada.es {
+	reverse_proxy strada-api:8788
+}
+
+# Fallback local / pruebas por IP (solo HTTP, sin certificado)
+:80 {
+	reverse_proxy strada-api:8788
+}

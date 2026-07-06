@@ -154,7 +154,7 @@ app.use(
   cors({
     origin(origin, callback) {
       if (!origin) {
-        if (IS_PRODUCTION) return callback(new Error('CORS: origen requerido'));
+        // Apps nativas (Expo) y health checks no envían Origin
         return callback(null, true);
       }
       if (CORS_ORIGINS.includes(origin)) return callback(null, true);

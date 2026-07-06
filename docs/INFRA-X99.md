@@ -39,6 +39,30 @@ Conexión remota con escritorio gráfico. Contraseña de acceso desatendido conf
 - Sistema actualizado (kernel 6.8.0-124).
 - AnyDesk activo y configurado.
 
+## Strada API (producción)
+
+| Campo | Valor |
+|-------|-------|
+| Ruta en servidor | `~/strada-api/` |
+| Datos persistentes | `/mnt/M5/strada-api/data` |
+| Contenedores | `strada-api`, `strada-caddy` |
+| Puerto interno API | `8788` |
+| HTTPS público | `https://api.strada.es` (tras DNS + puertos 80/443) |
+| IP pública | `85.56.205.160` |
+
+### Desplegar / actualizar
+
+```powershell
+cd C:\Users\Eduardo\Desktop\www\rutas-app
+.\scripts\deploy-x99.ps1
+```
+
+### DNS requerido
+
+Registro **A**: `api.strada.es` → `85.56.205.160`
+
+Router: reenviar **80** y **443** a x99.
+
 Scripts de mantenimiento en el servidor: `~/server-admin/scripts/`
 
 ## Tailscale

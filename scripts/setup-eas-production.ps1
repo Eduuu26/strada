@@ -17,7 +17,7 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-$apiUrl = Read-Host "URL del API en producción (ej. https://strada-api.onrender.com)"
+$apiUrl = Read-Host "URL del API en producción (ej. https://api.strada.es)"
 if (-not $apiUrl) { Write-Host "URL requerida"; exit 1 }
 
 $secrets = @{
