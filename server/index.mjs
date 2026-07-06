@@ -235,7 +235,7 @@ app.use((_req, res) => {
   res.status(404).json({ ok: false, error: 'No encontrado' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   ensureDemoAuthAccount();
   console.log(`Strada email server → http://127.0.0.1:${PORT}`);
   if (!smtpConfigured()) {

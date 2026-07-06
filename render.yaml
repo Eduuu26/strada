@@ -12,8 +12,6 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 8788
       - key: STRADA_JWT_SECRET
         generateValue: true
       - key: STRADA_EMAIL_API_KEY
